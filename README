@@ -1,0 +1,113 @@
+eos - funny little algorithms to implement a more tokenized system for my C string library
+
+these are used as AN ADDITION to my existing string library.
+
+what they are for:
+
+        these functions are meant to create a tokenized system which lexically
+        analyzes strings from left to right. for example, say we have a regular
+        old string which contains [5] characters, a little welcome.
+
+            "Hello"
+
+        now say we want to lexically analyze this entire string, meaning we want
+        to read it CHARACTER by CHARACTER. and this is very simple to do, using
+        regular plain C.
+
+        char* HELLO = "Hello";
+
+        while ((*HELLO != '\0')) {
+            printf("%c\n", *HELLO);
+            *HELLO++;
+        }
+
+        and that returns:
+
+        H
+        e
+        l
+        l
+        o
+
+        which is very nice, but however, with this library you can do that, but
+        much simpler and streamlined. like every other programming language out
+        there while still maintaining the very low level C spirit.
+
+        main ()
+        {
+            String s;
+            eoK_token t; /* the token struct */
+
+            str_init (&s);
+
+            ... // initialize and write your string here
+
+            start (&s, &t); /* start at the beginning of the string */
+            
+            while (!(endof(&s, &t) == 0)){
+                printf("%c\n", this(&s, &t));
+                move(&s, &t);
+            }
+
+            str_free (&s);
+        }
+
+        now this code seemingly does the exact same things, however, instead of
+        forcing it all until its null, this will go up until the character has
+        been moved to the absolute last character in the string. for some reason
+        there's no bugs to it so like. im not complaining and you wont be
+        either.
+        
+how it works:
+
+        Another very oblivious "how it works" section here.
+
+            EVERY C STRING (in my implementation) has a counter. dont rub me wrong
+        now, its an average pointer that just tells the system at what point the
+        string is at. ive already explained this so i wont again, but
+        essentially this system uses that same princple (instead of using the
+        provided string counter, which idk why i didnt) and starts a counter at
+        0. 
+        
+            in certain instances you MAY have to run the `trip()` function on
+        your own -- this function basically just allows the TOKEN struct to know
+        what the next character is and set it to the __next value. if it exists
+        of course, it will also set the __next_exists value too. to the index
+        the next character is at.
+
+trip() vs. move() vs. next():
+
+        do not rub it wrong - they are all doing the same thing in different
+        ways. let me explain:
+
+        trip()
+
+            trip is the function used to set the next character to the next
+            variable in the token struct. what this means is that it WILL NOT
+            MOVE THE CHARACTER - DO NOT GET THIS MIXED WITH THE MOVE FUNCTION
+            WHICH WILL MOVE THE CHARACTER THEN UPDATE THE NEXT CHARACTER, USING
+            THIS FUNCTION.
+
+        move()
+
+            move is the function which will move the counter over by 1, set the
+            current character to that of the counter, set the previous character
+            to the character before moving, and set the next character using
+            trip().
+            
+        next()
+
+            next will not do anything to the characters, it will only RETURN the
+            next character. you can not run next() and then this(), expecting
+            the next character to show up.
+
+extra infos:
+
+        Boost Software License - Version 1.0 - August 17th, 2003
+
+            * Kai D. Gonzalez - 2020-2023
+            * 182 LOC
+            * <gkai70263@gmail.com>
+            * in C
+
+
